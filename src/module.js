@@ -197,8 +197,8 @@ angular.module('stormpath', [
    */
 
   this.$get = [
-    '$user', '$injector', 'STORMPATH_CONFIG', '$rootScope', '$location',
-    function stormpathServiceFactory($user, $injector, STORMPATH_CONFIG, $rootScope, $location) {
+    '$user', '$injector', 'STORMPATH_CONFIG', '$rootScope', '$location', '$timeout',
+    function stormpathServiceFactory($user, $injector, STORMPATH_CONFIG, $rootScope, $location, $timeout) {
       var $state;
 
       function StormpathService(){
@@ -430,9 +430,9 @@ angular.module('stormpath', [
 
       StormpathService.prototype.routeChangeInterceptor = function routeChangeInterceptor(config) {
         function goToRoute(route) {
-          setTimeout(function() {
-            $location.path(route);
-          });
+          $timeout(function() {
+            $location.path(route.$$route.originalPath);
+          },1);
         }
 
         $rootScope.$on('$routeChangeStart', function(event, toRoute) {
